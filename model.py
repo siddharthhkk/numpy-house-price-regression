@@ -117,8 +117,14 @@ def add_bias_column(X):
     return np.hstack([xo, X])
     pass
 
-# Step 10 - make_shuffled_indices (not yet solved)
-# TODO: implement
+# Step 10 - make_shuffled_indices
+def make_shuffled_indices(n_samples, seed):
+    # TODO: Create a reproducibly shuffled permutation of row indices.
+    x = np.arange(n_samples)
+    s = np.random.default_rng(seed)
+    s.shuffle(x)
+    return x
+    pass
 
 # Step 11 - partition_indices (not yet solved)
 # TODO: implement
