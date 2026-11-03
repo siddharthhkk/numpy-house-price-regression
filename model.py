@@ -202,8 +202,32 @@ def residual_summary(y_true, y_pred):
     return {'mean': mean, 'std': std, 'median_abs': abss}
     pass
 
-# Step 19 - prepare_cleaned_features (not yet solved)
-# TODO: implement
+# Step 19 - prepare_cleaned_features
+def prepare_cleaned_features(X, iqr_k=1.5):
+    """Impute NaNs then IQR-clip columns to produce a clean numeric matrix.
+
+    Args:
+        X: (N, F) array-like of floats, may contain NaN.
+        iqr_k: IQR multiplier passed to compute_iqr_bounds (default 1.5).
+
+    Returns:
+        (N, F) float ndarray with no NaNs, columns clipped to IQR bounds.
+    """
+    # TODO: Produce a clean numeric matrix via impute then IQR clip
+    X_clean = np.array(X, dtype=float)
+    with np.errstate(all='ignore'):
+        col_means = np.nanmean(X_clean, axis=0)
+    col_means = np.nan_to_num(col_means, nan=0.0)
+    nan_inds = np.isnan(X_clean)
+    X_clean = np.where(nan_inds, col_means, X_clean)
+    q25 = np.percentile(X_clean, 25, axis=0)
+    q75 = np.percentile(X_clean, 75, axis=0)
+    iqr = q75 - q25
+    lower_bounds = q25 - iqr_k * iqr
+    upper_bounds = q75 + iqr_k * iqr
+    X_clean = np.clip(X_clean, lower_bounds, upper_bounds)
+    return X_clean
+    pass
 
 # Step 20 - assemble_feature_matrix (not yet solved)
 # TODO: implement
