@@ -229,8 +229,20 @@ def prepare_cleaned_features(X, iqr_k=1.5):
     return X_clean
     pass
 
-# Step 20 - assemble_feature_matrix (not yet solved)
-# TODO: implement
+# Step 20 - assemble_feature_matrix
+import numpy as np
+def assemble_feature_matrix(X_num, ratio_num_idx, ratio_den_idx, cat_labels=None):
+    # TODO: build an extended feature matrix by appending a derived ratio...
+    num = X_num[:, ratio_num_idx]
+    denom = X_num[:, ratio_den_idx]
+    ratiof = make_ratio_feature(num, denom, eps=1e-08)
+    res = append_column(X_num, ratiof)
+    if cat_labels is not None:
+        pp = one_hot_encode(cat_labels)
+        for i in range(pp.shape[1]):
+            res = append_column(res, pp[:, i])
+    return res
+    pass
 
 # Step 21 - make_train_val_test (not yet solved)
 # TODO: implement
